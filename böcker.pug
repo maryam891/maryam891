@@ -1,0 +1,33 @@
+doctype html
+html 
+    head
+        script(src="https://code.jquery.com/jquery-2.2.4.min.js") 
+        script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js")
+        link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'
+        integrity='sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u' crossorigin='anonymous') 
+        title 
+    body
+        style(type='text/css').
+            .table tbody tr{
+                cursor:pointer;
+            }
+            .table tbody tr:hover{
+                background-color:#646464;
+            }
+        table.table
+            tr
+                th='Titel'
+                th='ISBN' 
+                th='Författare'
+                th='Pris'
+            each bok in böcker
+                - var isbn= bok.ISBN13
+                tr(data-href='/book/'+isbn)
+                    each index,value in bok 
+                        td=index
+                script.
+                    jQuery(document).ready(function($) {
+                        $(".table > tbody > tr").click(function() {
+                            window.location = $(this).data("href");
+                        });
+                    });            

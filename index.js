@@ -1,7 +1,9 @@
+const { request } = require("express");
 const express = require("express");
 const sql = require("mssql");
 const app = express();
-
+const isbn = "9";
+sql.input("isbn", sql.VarChar, isbn);
 const connectionsetting = {
   server: "localhost",
   database: "Bokhandel",
@@ -20,18 +22,16 @@ app.get("/", async (req, res) => {
     const result = await connection
       .request()
       .query(
-        "select böcker.Titel,böcker.ISBN13,författare.Förnamn,böcker.Pris from böcker INNER JOIN författare ON böcker.FörfattareID=författare.ID"
+        "select böcker.Titel,böcker.ISBN13,författare.Förnamn,böcker.Pris from böcker INNER JOIN författare ON böcker.FörfattareID=författare.ID where isbn=@isbn%9%"
       );
     console.log(result);
     try {
-      // res.json(result);
       res.render("böcker.pug", { böcker: result.recordset });
     } catch (ex) {
       console.log(ex);
     }
   } catch (ex) {
     console.log(ex);
-    // res.send(ex.message);
   }
 });
 app.get("/book/:isbn", async (req, res) => {
@@ -46,14 +46,12 @@ app.get("/book/:isbn", async (req, res) => {
       );
     console.log(result);
     try {
-      //res.json(result);
-      res.render("böckers.pug", { böcker: result.recordset });
+      res.render("bok.pug", { böcker: result.recordset });
     } catch (ex) {
       console.log(ex);
     }
   } catch (ex) {
     console.log(ex);
-    // res.send(ex.message);
   }
 });
 app.listen(3000, () => {
